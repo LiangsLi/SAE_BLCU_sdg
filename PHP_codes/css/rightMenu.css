@@ -1,0 +1,54 @@
+@CHARSET "UTF-8";
+/*
+ 鼠标右键样式文件
+ 2011年11月17日15:28:47
+ * */
+.rightMenufont{
+	font-weight:bolder;
+}
+
+.rightMenu{
+	position:absolute;
+	top:999px;
+	left:99px;
+	font:12px/1.5 \5fae\8f6f\96c5\9ed1;
+}
+.rightMenu ul{
+	list-style-type:none;
+	float:left;
+	border:1px solid #979797;
+	background:#f1f1f1 url(img/rightMenu_line.png) 24px 0 repeat-y;
+	padding:2px;
+	box-shadow:2px 2px 2px rgba(0,0,0,.6);
+}
+
+.rightMenu ul li{
+	float:left;
+	clear:both;
+	height:24px;
+	cursor:pointer;
+	line-height:24px;
+	white-space:nowrap;
+	padding:0 30px;
+}
+
+.rightMenu ul li.sub{
+	background-repeat:no-repeat;
+	background-position:right 9px;
+	background-image:url(img/rightMenu_arrow.png);
+}
+
+.rightMenu ul li.active{
+	background-color:#f1f3f6;
+	border-radius:3px;
+	border:1px solid #aecff7;
+	height:22px;
+	line-height:22px;
+	background-position:right -8px;
+	padding:0 29px;
+}
+
+.rightMenu ul ul{
+	display:none;
+	position:absolute;
+}
