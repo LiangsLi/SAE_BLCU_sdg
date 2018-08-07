@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<!-- saved from url=(0329)http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D -->
+<html class="theme-next muse use-motion" lang="zh-Hans" data-blockbyte-bs-uid="59378"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="./在SAE上部署及使用标注系统 _ Avalon_files/jquery.fancybox.css" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link href="./在SAE上部署及使用标注系统 _ Avalon_files/css" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="./在SAE上部署及使用标注系统 _ Avalon_files/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<link href="./在SAE上部署及使用标注系统 _ Avalon_files/main.css" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Sina App Engine,PHP,Python,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="http://alexyxwang.me/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="现在用的这个在线标注系统部署使用起来有些麻烦，过段时间就忘了，所以这里记录下来。 本文包括三部分，第一部分介绍如何在SAE上部署标注系统，包括代码部分和数据库部分。第二部分介绍预处理和后处理，包括主要php文件概述，CoNLL文件与数据库中保存格式的互相转换。第三部分介绍标注系统使用流程，标注者直接看这里就好。">
+<meta name="keywords" content="Sina App Engine,PHP,Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在SAE上部署及使用标注系统">
+<meta property="og:url" content="www.alexyxwang.me/2017/09/19/在SAE上部署及使用标注系统/index.html">
+<meta property="og:site_name" content="Avalon">
+<meta property="og:description" content="现在用的这个在线标注系统部署使用起来有些麻烦，过段时间就忘了，所以这里记录下来。 本文包括三部分，第一部分介绍如何在SAE上部署标注系统，包括代码部分和数据库部分。第二部分介绍预处理和后处理，包括主要php文件概述，CoNLL文件与数据库中保存格式的互相转换。第三部分介绍标注系统使用流程，标注者直接看这里就好。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="/2017/09/19/在SAE上部署及使用标注系统/login.jpg">
+<meta property="og:image" content="/2017/09/19/在SAE上部署及使用标注系统/label_dep.jpg">
+<meta property="og:image" content="/2017/09/19/在SAE上部署及使用标注系统/label_dep2.jpg">
+<meta property="og:image" content="/2017/09/19/在SAE上部署及使用标注系统/history.jpg">
+<meta property="og:updated_time" content="2018-01-19T10:36:41.689Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在SAE上部署及使用标注系统">
+<meta name="twitter:description" content="现在用的这个在线标注系统部署使用起来有些麻烦，过段时间就忘了，所以这里记录下来。 本文包括三部分，第一部分介绍如何在SAE上部署标注系统，包括代码部分和数据库部分。第二部分介绍预处理和后处理，包括主要php文件概述，CoNLL文件与数据库中保存格式的互相转换。第三部分介绍标注系统使用流程，标注者直接看这里就好。">
+<meta name="twitter:image" content="/2017/09/19/在SAE上部署及使用标注系统/login.jpg">
+
+
+
+<script src="./在SAE上部署及使用标注系统 _ Avalon_files/embed.dist.js" async=""></script><script src="./在SAE上部署及使用标注系统 _ Avalon_files/stats"></script><script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/www.alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/">
+
+
+
+
+
+  <title>在SAE上部署及使用标注系统 | Avalon</title>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=63531031";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+
+
+
+
+<style type="text/css">.fancybox-margin{margin-right:0px;}</style><style class="blockbyte-bs-style" data-name="content">body>div#blockbyte-bs-indicator>div{opacity:0;pointer-events:none}body>iframe#blockbyte-bs-sidebar.blockbyte-bs-visible,body>iframe#blockbyte-bs-overlay.blockbyte-bs-visible{opacity:1;pointer-events:auto}body.blockbyte-bs-noscroll{overflow:hidden !important}body>div#blockbyte-bs-indicator>div{position:absolute;transform:translate3d(-40px, 0, 0);top:0;left:0;width:40px !important;height:100%;background:rgba(0,0,0,0.5);border-radius:0 10px 10px 0;transition:opacity 0.3s, transform 0.3s;z-index:2}body>div#blockbyte-bs-indicator>div>span{-webkit-mask:no-repeat center/32px;-webkit-mask-image:url(chrome-extension://jdbnofccmhefkmjbkkdkfiicjkgofkdh/img/icon-bookmark.svg);background-color:#ffffff;position:absolute;display:block;top:0;left:0;width:100%;height:100%}body>div#blockbyte-bs-indicator[data-pos='right']{left:auto;right:0}body>div#blockbyte-bs-indicator[data-pos='right']>div{transform:translate3d(40px, 0, 0);left:auto;right:0;border-radius:10px 0 0 10px}body>div#blockbyte-bs-indicator.blockbyte-bs-fullHeight>div{border-radius:0}body>div#blockbyte-bs-indicator.blockbyte-bs-hover>div{transform:translate3d(0, 0, 0);opacity:1}body>div#blockbyte-bs-indicator[data-pos='left'].blockbyte-bs-has-lsb{height:100% !important;top:0 !important}body>div#blockbyte-bs-indicator[data-pos='left'].blockbyte-bs-has-lsb>div{background:transparent}body>div#blockbyte-bs-indicator[data-pos='left'].blockbyte-bs-has-lsb>div>span{-webkit-mask-position-y:20px}body>iframe#blockbyte-bs-sidebar{width:350px;max-width:none;height:0;z-index:2147483646;background-color:rgba(255,255,255,0.8) !important;border:none;display:block !important;transform:translate3d(-350px, 0, 0);transition:width 0s 0.3s, height 0s 0.3s, opacity 0.3s, transform 0.3s}body>iframe#blockbyte-bs-sidebar[data-pos='right']{left:auto;right:0;transform:translate3d(350px, 0, 0)}body>iframe#blockbyte-bs-sidebar.blockbyte-bs-visible{width:calc(100% + 350px);height:100%;transform:translate3d(0, 0, 0);transition:opacity 0.3s, transform 0.3s}body>iframe#blockbyte-bs-sidebar.blockbyte-bs-hideMask{background:none !important}body>iframe#blockbyte-bs-sidebar.blockbyte-bs-hideMask:not(.blockbyte-bs-hover){width:calc(350px + 50px)}body>iframe#blockbyte-bs-overlay{width:100%;max-width:none;height:100%;z-index:2147483647;border:none;background:rgba(0,0,0,0.5) !important;transition:opacity 0.3s}
+</style><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans" class="" style="padding-right: 320px;"><div id="MathJax_Message" style="display: none;"></div>
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="http://alexyxwang.me/" class="brand" rel="start" style="opacity: 1;">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title" style="opacity: 1; top: 0px;">Avalon</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle" style="opacity: 1; top: 0px;">全て遠き理想郷</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home" style="opacity: 1; transform: translateY(0px);">
+          <a href="http://alexyxwang.me/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories" style="opacity: 1; transform: translateY(0px);">
+          <a href="http://alexyxwang.me/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about" style="opacity: 1; transform: translateY(0px);">
+          <a href="http://alexyxwang.me/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives" style="opacity: 1; transform: translateY(0px);">
+          <a href="http://alexyxwang.me/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags" style="opacity: 1; transform: translateY(0px);">
+          <a href="http://alexyxwang.me/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article" style="opacity: 1; display: block; transform: translateY(0px);">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/www.alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alex">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Avalon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">在SAE上部署及使用标注系统</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-19T16:10:11+08:00">
+                2017-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="http://alexyxwang.me/categories/Website/" itemprop="url" rel="index">
+                    <span itemprop="name">Website</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/09/19/在SAE上部署及使用标注系统/" class="leancloud_visitors" data-flag-title="在SAE上部署及使用标注系统">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count">110</span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>现在用的这个在线标注系统部署使用起来有些麻烦，过段时间就忘了，所以这里记录下来。</p>
+<p>本文包括三部分，第一部分介绍如何在SAE上部署标注系统，包括代码部分和数据库部分。第二部分介绍预处理和后处理，包括主要php文件概述，CoNLL文件与数据库中保存格式的互相转换。第三部分介绍标注系统使用流程，<strong>标注者直接看这里就好</strong>。</p>
+<a id="more"></a>
+<h2 id="部署"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E9%83%A8%E7%BD%B2" class="headerlink" title="部署"></a>部署</h2><h3 id="代码管理"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86" class="headerlink" title="代码管理"></a>代码管理</h3><p>登录新浪云，在<a href="http://sae.sina.com.cn/" target="_blank" rel="external">云应用 SAE</a>中创建新应用，全部按照默认配置即可，假设创建的应用名为<code>appname</code>。</p>
+<p>创建成功后进入应用管理，在左侧的<code>应用</code>菜单中选择<code>代码管理</code>，在右侧出现界面中选择<code>上传代码包</code>，上传标注系统的代码压缩包。这时点击下方的应用链接访问刚才注册的应用网址会提示无法连接数据库，因此接下来需要搭建数据库。</p>
+<h3 id="创建数据库"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93" class="headerlink" title="创建数据库"></a>创建数据库</h3><p>仍然在左侧的<code>数据库与缓存服务</code>菜单中选择<code>共享型MySQL</code>，在右侧出现界面中选择<code>创建MySQL</code>，在下面会出现名为<code>app_appname</code>的数据库。点击数据库对应的<code>管理</code>进入管理界面，在最上面一排选项中选择<code>导入</code>，用以下代码对数据库进行初始化。</p>
+<p>注意这里的数据库命名规则是<code>app_</code>+刚刚注册的<code>appname</code>，所以第一句的数据库名需要根据应用名不同修改。</p>
+<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">USE</span> app_sdpannotate;</div><div class="line"></div><div class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> <span class="string">`charge`</span> (</div><div class="line">  <span class="string">`sent`</span> <span class="built_in">varchar</span>(<span class="number">300</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`tagsent`</span> <span class="built_in">varchar</span>(<span class="number">300</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`annoter`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`tagtime`</span> <span class="built_in">varchar</span>(<span class="number">30</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`comment`</span> <span class="built_in">varchar</span>(<span class="number">300</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`chargetime`</span> <span class="built_in">varchar</span>(<span class="number">30</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`result`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`adminname`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`chargecomment`</span> <span class="built_in">varchar</span>(<span class="number">300</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span></div><div class="line">) <span class="keyword">ENGINE</span>=MyISAM <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=gbk;</div><div class="line"></div><div class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> <span class="string">`dependancy`</span> (</div><div class="line">  <span class="string">`sentid`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`sent`</span> <span class="built_in">varchar</span>(<span class="number">1500</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`dep_sent`</span> <span class="built_in">varchar</span>(<span class="number">1500</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`res_sent`</span> <span class="built_in">varchar</span>(<span class="number">1500</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`tag`</span> <span class="built_in">char</span>(<span class="number">2</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`annoter`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`time`</span> <span class="built_in">varchar</span>(<span class="number">30</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`skip`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`comment`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`sentid`</span>,<span class="string">`annoter`</span>)</div><div class="line">) <span class="keyword">ENGINE</span>=MyISAM <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</div><div class="line"></div><div class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> <span class="string">`dep_charge`</span> (</div><div class="line">  <span class="string">`sentid`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`sent`</span> <span class="built_in">varchar</span>(<span class="number">300</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`res_sent`</span> <span class="built_in">varchar</span>(<span class="number">1000</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`annoter`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`res_time`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`comment`</span> <span class="built_in">varchar</span>(<span class="number">500</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`chargetime`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`result`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`adminname`</span> <span class="built_in">varchar</span>(<span class="number">30</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`chargecomment`</span> <span class="built_in">varchar</span>(<span class="number">500</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span></div><div class="line">) <span class="keyword">ENGINE</span>=MyISAM <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</div><div class="line"></div><div class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> <span class="string">`dep_sentence`</span> (</div><div class="line">  <span class="string">`sentid`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</div><div class="line">  <span class="string">`sent`</span> <span class="built_in">varchar</span>(<span class="number">1500</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`proto_depsent`</span> <span class="built_in">varchar</span>(<span class="number">1500</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> gbk <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`done`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`sentid`</span>)</div><div class="line">) <span class="keyword">ENGINE</span>=MyISAM  <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8 AUTO_INCREMENT=<span class="number">102904</span> ;</div><div class="line"></div><div class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> <span class="string">`signup`</span> (</div><div class="line">  <span class="string">`uid`</span> <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`username`</span> <span class="built_in">varchar</span>(<span class="number">40</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`password`</span> <span class="built_in">varchar</span>(<span class="number">40</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`times`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`regtime`</span> <span class="built_in">char</span>(<span class="number">40</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`complete`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`firstweek`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`secondweek`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`fourweek`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`dep_compelete`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</div><div class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`uid`</span>,<span class="string">`username`</span>)</div><div class="line">) <span class="keyword">ENGINE</span>=MyISAM <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=gbk;</div></pre></td></tr></tbody></table></figure>
+<p>至此应用网站已经可以正常访问，用户注册、登录等功能也已经正常，但是还没有待标注数据，因此接下来需要对CoNLL文件进行转化，之后输入数据库中，才能开始标注。</p>
+<h2 id="使用流程"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E4%BD%BF%E7%94%A8%E6%B5%81%E7%A8%8B" class="headerlink" title="使用流程"></a>使用流程</h2><ul>
+<li>在SAE上按照上一节的方法部署代码</li>
+<li>用上一节的sql语句初始化数据库</li>
+<li>将已经自动标注好的CoNLL文件用下一节中的conll2sql脚本转换为sql语句，用得到的sql语句将句子信息导入数据库（例子中CoNLL文件一共1000句，分成10份，因此会输出10个文件，每个文件对应100句话的sql语句，每份对应一个标注者）</li>
+<li>根据上一步的个数以及标注者的annoter这一项的值在系统中注册对应的用户名（例如，0-99句分给annoter <code>user0</code>，对应需要注册一个用户名为<code>user0</code>的账号，用该账号登陆之后需要标注的就是这100句话）</li>
+<li>在系统中标注数据，主要是对自动预测结果的修正</li>
+<li>从数据库中将<code>dependency</code>表的数据导出</li>
+<li>用下一节中的csv2conll脚本将导出的数据转化为CoNLL格式</li>
+</ul>
+<p>注：这里使用的CoNLL格式如下所示，其中每句话用一行表示，第一列表示词在句中的<strong>位置</strong>，第二列表示<strong>词</strong>，第四列表示<strong>词性</strong>，第七列表示<strong>父节点位置</strong>，第八列表示该词与当前父节点之间<strong>弧上的标签</strong>。</p>
+<pre><code>1       我      我      n       n       _       2       Exp     _       _
+2       是      是      v       v       _       5       Root    _       _
+3       中国    中国    a       a       _       4       Desc    _       _
+4       人    人    n       n       _       2       Clas    _       _
+
+1       早起    早起    n       n       _       2       Exp     _       _
+2       使      使      v       v       _       5       Root    _       _
+3       人      人      n       n       _       2       Datv    _       _
+3       人      人      n       n       _       4       Agt     _       _
+4       健康    健康    v       v       _       2       eResu   _       _
+</code></pre><h2 id="预处理及后处理"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E9%A2%84%E5%A4%84%E7%90%86%E5%8F%8A%E5%90%8E%E5%A4%84%E7%90%86" class="headerlink" title="预处理及后处理"></a>预处理及后处理</h2><h3 id="主要php文件概述及标注流程"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E4%B8%BB%E8%A6%81php%E6%96%87%E4%BB%B6%E6%A6%82%E8%BF%B0%E5%8F%8A%E6%A0%87%E6%B3%A8%E6%B5%81%E7%A8%8B" class="headerlink" title="主要php文件概述及标注流程"></a>主要php文件概述及标注流程</h3><h4 id="index-php"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#index-php" class="headerlink" title="index.php"></a><code>index.php</code></h4><p>登录界面，在数据库中signup表中查询用户信息。</p>
+<h4 id="register-php-registerc-php"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#register-php-registerc-php" class="headerlink" title="register.php/registerc.php"></a><code>register.php/registerc.php</code></h4><p>注册界面，在数据库中signup表中先查询用户名是否重复，如果不重复则将用户信息插入signup表中。</p>
+<h4 id="label-dep-php"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#label-dep-php" class="headerlink" title="label_dep.php"></a><code>label_dep.php</code></h4><p>标注界面，从数据库中dependancy表中选择annotater项为当前用户的，且还未标注的句子显示。</p>
+<p>先后单击词A和B会生成一条由A指向B的弧，右键单击弧标签可以选中该弧（由蓝色变红），此时可以再次右键单击标签进行<strong>修改弧标签</strong>。在选中一条弧的情况下双击该弧可以删除该弧。标注完毕后点击保存将结果保存到数据库中dependancy表中的res_sent项。（弧标签类别也是在这里定义的）</p>
+<p>单击下方的<code>切换修改分词</code>可以<strong>修改分词和词性</strong>。在最后一列词性上单击右键会出现增加/删除一列的选项，用于修改分词。在每个词性上单击右键都会出现可以替换的词性列表，用于修改词性。（修改的词性也是在这里定义的）</p>
+<h4 id="historyc-dep-php"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#historyc-dep-php" class="headerlink" title="historyc_dep.php"></a><code>historyc_dep.php</code></h4><p>标注历史界面，从数据库中dependancy表中选择annotater项为当前用户且已经标注的句子显示。单击一个句子可以对其重新进行标注。</p>
+<h3 id="CoNLL文件转换为sql文件"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#CoNLL%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E4%B8%BAsql%E6%96%87%E4%BB%B6" class="headerlink" title="CoNLL文件转换为sql文件"></a>CoNLL文件转换为sql文件</h3><p>用如下python脚本将CoNLL文件转换为sql语句</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> sys</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">output</span><span class="params">(sents, begin, end, outfile, user)</span>:</span></div><div class="line">    annotator = user</div><div class="line">    sql = <span class="string">"insert into dependancy(sentid,sent,dep_sent,annoter) values"</span></div><div class="line">    i = begin</div><div class="line">    raw_sent = <span class="string">' '</span>.join([<span class="string">'['</span> + str(id) + <span class="string">']'</span> + tok[<span class="number">0</span>] + <span class="string">'/'</span> + tok[<span class="number">1</span>] <span class="keyword">for</span> id, tok <span class="keyword">in</span> enumerate(sents[begin])])</div><div class="line">    sql += <span class="string">"('"</span> + str(i) + <span class="string">"','"</span> + raw_sent + <span class="string">"','"</span></div><div class="line">    rels = <span class="string">"\t\t"</span>.join([<span class="string">'['</span>+str(tok[<span class="number">2</span>])+<span class="string">']'</span>+sents[begin][tok[<span class="number">2</span>]][<span class="number">0</span>]+<span class="string">'_['</span>+str(id+<span class="number">1</span>)+<span class="string">']'</span>+tok[<span class="number">0</span>]+<span class="string">'('</span>+tok[<span class="number">3</span>]+<span class="string">')'</span> <span class="keyword">for</span> id, tok <span class="keyword">in</span> enumerate(sents[begin][<span class="number">1</span>:]) ])</div><div class="line">    sql += rels + <span class="string">"','"</span>+annotator+<span class="string">"')"</span></div><div class="line">    i += <span class="number">1</span></div><div class="line">    <span class="keyword">for</span> sent <span class="keyword">in</span> sents[begin+<span class="number">1</span>:end+<span class="number">1</span>]:</div><div class="line">        raw_sent = <span class="string">' '</span>.join([<span class="string">'['</span> + str(id) + <span class="string">']'</span> + tok[<span class="number">0</span>] + <span class="string">'/'</span> + tok[<span class="number">1</span>] <span class="keyword">for</span> id, tok <span class="keyword">in</span> enumerate(sent)])</div><div class="line">        sql += <span class="string">",('"</span> + str(i) + <span class="string">"','"</span> + raw_sent + <span class="string">"','"</span></div><div class="line">        rels = <span class="string">"\t\t"</span>.join([<span class="string">'['</span>+str(tok[<span class="number">2</span>])+<span class="string">']'</span>+sent[tok[<span class="number">2</span>]][<span class="number">0</span>]+<span class="string">'_['</span>+str(id+<span class="number">1</span>)+<span class="string">']'</span>+tok[<span class="number">0</span>]+<span class="string">'('</span>+tok[<span class="number">3</span>]+<span class="string">')'</span> <span class="keyword">for</span> id, tok <span class="keyword">in</span> enumerate(sent[<span class="number">1</span>:]) ])</div><div class="line">        sql += rels + <span class="string">"','"</span>+annotator+<span class="string">"')"</span></div><div class="line">        i += <span class="number">1</span></div><div class="line">    fo = file(outfile,<span class="string">"w"</span>)</div><div class="line">    fo.write(sql)</div><div class="line">    </div><div class="line"><span class="keyword">if</span> __name__==<span class="string">"__main__"</span>:</div><div class="line">    fi = file(<span class="string">"biaozhu.txt"</span>,<span class="string">"r"</span>)</div><div class="line">    fi = fi.read()</div><div class="line">    sents = fi.strip().split(<span class="string">"\n\n"</span>)</div><div class="line">    <span class="keyword">print</span> <span class="string">"total sents: "</span>,len(sents)</div><div class="line">    sentences = []</div><div class="line">    n = <span class="number">0</span></div><div class="line">    <span class="keyword">for</span> sent <span class="keyword">in</span> sents:</div><div class="line">        sentences.append([])</div><div class="line">        sentences[n].append((<span class="string">"Root"</span>, <span class="string">"Root"</span>, <span class="number">-1</span>, <span class="string">"-NULL-"</span>))</div><div class="line">        lines = sent.strip().split(<span class="string">"\n"</span>)</div><div class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> lines:</div><div class="line">            items = line.strip().split(<span class="string">"\t"</span>)</div><div class="line">            sentences[n].append((items[<span class="number">1</span>], items[<span class="number">3</span>], int(items[<span class="number">6</span>]), items[<span class="number">7</span>]))</div><div class="line">        n += <span class="number">1</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">10</span>):</div><div class="line">        output(sentences, i*<span class="number">100</span>, i*<span class="number">100</span>+<span class="number">99</span>, <span class="string">"huawei"</span>+str(i*<span class="number">100</span>)+<span class="string">"-"</span>+str(i*<span class="number">100</span>+<span class="number">99</span>)+<span class="string">"-user"</span>+str(i)+<span class="string">".sql"</span>, <span class="string">"user"</span>+str(i))</div></pre></td></tr></tbody></table></figure>
+<p>这里把1000句话拆成10份，每份annotator不同，这样用不同的账号登陆时将被分配给对应任务。此外也是因为1000句sql语句同时上传的时候太卡，拆分之后就快很多。</p>
+<p><strong>输入CoNLL文件格式在上一节中给出了例子，如果输入的句子数量不是1000句或者想要采用别的分组方式，可以修改一下主函数里的调用。</strong></p>
+<h3 id="csv文件转换为CoNLL文件"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#csv%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E4%B8%BACoNLL%E6%96%87%E4%BB%B6" class="headerlink" title="csv文件转换为CoNLL文件"></a>csv文件转换为CoNLL文件</h3><p>在数据库中将标注好的句子导出到csv文件，用如下Python脚本将csv文件转换为CoNLL文件</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">output</span><span class="params">(outfile, sents)</span>:</span></div><div class="line">    fo = file(outfile, <span class="string">"w"</span>)</div><div class="line">    <span class="keyword">for</span> sent <span class="keyword">in</span> sents:</div><div class="line">        <span class="keyword">for</span> idx, tok <span class="keyword">in</span> enumerate(sent[<span class="number">1</span>:]):</div><div class="line">            line = str(idx+<span class="number">1</span>)+<span class="string">"\t"</span>+tok[<span class="string">"tok"</span>]+<span class="string">"\t"</span>+tok[<span class="string">"tok"</span>]+<span class="string">"\t"</span>+tok[<span class="string">"pos"</span>]+<span class="string">"\t"</span>+tok[<span class="string">"pos"</span>]+<span class="string">"\t_\t"</span>+str(tok[<span class="string">"hed"</span>])+<span class="string">"\t"</span>+tok[<span class="string">"rel"</span>]+<span class="string">"\t_\t_\n"</span></div><div class="line">            fo.write(line)</div><div class="line">        fo.write(<span class="string">"\n"</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">process</span><span class="params">(infos)</span>:</span></div><div class="line">    sents = []</div><div class="line">    <span class="keyword">for</span> info <span class="keyword">in</span> infos:</div><div class="line">        sent = [{<span class="string">"tok"</span>:token[<span class="number">0</span>], <span class="string">"pos"</span>:token[<span class="number">1</span>]} <span class="keyword">for</span> token <span class="keyword">in</span> [tok.split(<span class="string">"]"</span>)[<span class="number">1</span>].split(<span class="string">"/"</span>) <span class="keyword">for</span> tok <span class="keyword">in</span> info[<span class="string">"tokens"</span>]]]</div><div class="line">        <span class="keyword">for</span> rel <span class="keyword">in</span> info[<span class="string">"result"</span>]:</div><div class="line">            items = rel.split(<span class="string">"_"</span>)</div><div class="line">            index = int(items[<span class="number">1</span>].split(<span class="string">"]"</span>)[<span class="number">0</span>].strip(<span class="string">"["</span>))</div><div class="line">            head = int(items[<span class="number">0</span>].split(<span class="string">"]"</span>)[<span class="number">0</span>].strip(<span class="string">"["</span>))</div><div class="line">            relation = items[<span class="number">1</span>].split(<span class="string">"("</span>)[<span class="number">1</span>].strip(<span class="string">")"</span>)</div><div class="line">            <span class="comment">#print index, head, relation</span></div><div class="line">            sent[index][<span class="string">"hed"</span>] = head</div><div class="line">            sent[index][<span class="string">"rel"</span>] = relation</div><div class="line">        sents.append(sent)</div><div class="line">    <span class="keyword">return</span> sents</div><div class="line">    </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    fi = file(<span class="string">"dependancy.csv"</span>, <span class="string">"r"</span>)</div><div class="line">    fi = fi.read()</div><div class="line">    sents = fi.strip().split(<span class="string">"\n"</span>)</div><div class="line">    infos = []</div><div class="line">    <span class="keyword">for</span> sent <span class="keyword">in</span> sents:</div><div class="line">        info = {}</div><div class="line">        items = [it.strip(<span class="string">"\""</span>) <span class="keyword">for</span> it <span class="keyword">in</span> sent.strip().split(<span class="string">";"</span>)]</div><div class="line">        <span class="keyword">if</span> items[<span class="number">7</span>] == <span class="string">"1"</span>: <span class="keyword">continue</span> <span class="comment">#skip the skipped sents</span></div><div class="line">        info[<span class="string">"tokens"</span>] = items[<span class="number">1</span>].strip().split()</div><div class="line">        info[<span class="string">"origin"</span>] = items[<span class="number">2</span>].strip().split(<span class="string">"\t\t"</span>)</div><div class="line">        info[<span class="string">"result"</span>] = items[<span class="number">3</span>].strip().split(<span class="string">"\t"</span>)</div><div class="line">        infos.append(info)</div><div class="line">    sents = process(infos)</div><div class="line">    output(<span class="string">"annotated_test.conll"</span>, sents)</div></pre></td></tr></tbody></table></figure>
+<p>数据库中<code>dependancy</code>表包括<code>sentid</code>, <code>sent</code>, <code>dep_sent</code>, <code>res_sent</code>, <code>tag</code>, <code>annoter</code>, <code>time</code>, <code>skip</code>和<code>comment</code>等几个column，这里用到的是<code>sent</code>（保存句子的词项和词性信息），<code>res_sent</code>（保存标注的句子弧和标签信息）以及<code>skip</code>（记录该句子是否被跳过，跳过为1，否则为0）。</p>
+<h2 id="标注系统介绍"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F%E4%BB%8B%E7%BB%8D" class="headerlink" title="标注系统介绍"></a>标注系统介绍</h2><h3 id="登录界面"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2" class="headerlink" title="登录界面"></a>登录界面</h3><p>进入<a href="http://sdpannotate.applinzi.com/" target="_blank" rel="external">标注系统主页</a>会看到以下登录界面，用户名为<code>user0</code>~<code>user9</code>，每个用户名下分配了100句话。</p>
+<a href="./在SAE上部署及使用标注系统 _ Avalon_files/login.jpg" class="fancybox fancybox.image" rel="group" title="登录界面"><img src="./在SAE上部署及使用标注系统 _ Avalon_files/login.jpg" alt="登录界面" title="登录界面"><p class="image-caption">登录界面</p></a>
+<h3 id="标注界面"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E6%A0%87%E6%B3%A8%E7%95%8C%E9%9D%A2" class="headerlink" title="标注界面"></a>标注界面</h3><p>登录之后进入标注界面，待标注句子可能在比较下面的位置，如果找不到就往下拉。</p>
+<a href="./在SAE上部署及使用标注系统 _ Avalon_files/label_dep.jpg" class="fancybox fancybox.image" rel="group" title="标注界面-修改弧标签"><img src="./在SAE上部署及使用标注系统 _ Avalon_files/label_dep.jpg" alt="标注界面-修改弧标签" title="标注界面-修改弧标签"><p class="image-caption">标注界面-修改弧标签</p></a>
+<p>先后单击词A和B会生成一条由A指向B的弧，右键单击弧标签可以选中该弧（由蓝色变红），此时可以再次右键单击标签进行<strong>修改弧标签</strong>（如上图所示）。在选中一条弧的情况下双击该弧可以删除该弧。</p>
+<a href="./在SAE上部署及使用标注系统 _ Avalon_files/label_dep2.jpg" class="fancybox fancybox.image" rel="group" title="标注界面-修改分词/词性"><img src="./在SAE上部署及使用标注系统 _ Avalon_files/label_dep2.jpg" alt="标注界面-修改分词/词性" title="标注界面-修改分词/词性"><p class="image-caption">标注界面-修改分词/词性</p></a>
+<p>单击下方的<code>切换修改分词</code>可以<strong>修改分词和词性</strong>。在最后一列词性上单击右键会出现增加/删除一列的选项，用于修改分词。在每个词性上单击右键都会出现可以替换的词性列表，用于修改词性。修改完毕之后单击下方<code>分词修改完毕</code>保存修改。</p>
+<p>标注完成后单击<code>保存</code>将对该句子的标注存入数据库。</p>
+<p>此外，最下面还有<strong>跳过</strong>选项，需要先选择一个跳过理由（如果选择‘其他’则需要填写跳过理由），然后单击<code>跳过</code>。跳过的句子在数据库中会有标记，并不会再次出现。</p>
+<h3 id="历史记录"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95" class="headerlink" title="历史记录"></a>历史记录</h3><p>单击标注界面右上角<code>历史记录</code>进入历史记录界面，显示所有当前用户标注过的句子。左键单击一个句子会进入标注界面，可以<strong>修改该句子标注结果</strong>。</p>
+<a href="./在SAE上部署及使用标注系统 _ Avalon_files/history.jpg" class="fancybox fancybox.image" rel="group" title="历史记录界面"><img src="./在SAE上部署及使用标注系统 _ Avalon_files/history.jpg" alt="历史记录界面" title="历史记录界面"><p class="image-caption">历史记录界面</p></a>
+<p>单击<code>新任务</code>可以<strong>回到标注界面</strong>，进行下一个句子的标注。</p>
+<h2 id="代码修改"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9" class="headerlink" title="代码修改"></a>代码修改</h2><h3 id="绝对路径改为相对路径"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E6%94%B9%E4%B8%BA%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84" class="headerlink" title="绝对路径改为相对路径"></a>绝对路径改为相对路径</h3><p>原来的代码中存在许多绝对路径链接，例如<code>label_dep.php</code>中的：</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$url = <span class="string">"http://semanticannotate.sinaapp.com/index.php"</span>;</div><div class="line"><span class="keyword">echo</span> <span class="string">"window.location.href='$url'"</span>;</div></pre></td></tr></tbody></table></figure>
+<p>如果注册域名不是<code>semanticannotate</code>的话，就会重定向到错误网址，解决方法是将这些都改成相对路径，例如这里改为：</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$url = <span class="string">"index.php"</span>;</div><div class="line"><span class="keyword">echo</span> <span class="string">"window.location.href='$url'"</span>;</div></pre></td></tr></tbody></table></figure>
+<p>在<strong>主要php文件概述及标注流程</strong>里说明的几个文件里应该都存在这种情况，直接<code>Ctrl</code>+<code>F</code>搜索<code>semantic</code>找绝对路径然后改成相对路径就行。</p>
+<h3 id="当前用户已标注数据统计"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E5%B7%B2%E6%A0%87%E6%B3%A8%E6%95%B0%E6%8D%AE%E7%BB%9F%E8%AE%A1" class="headerlink" title="当前用户已标注数据统计"></a>当前用户已标注数据统计</h3><p><code>label_dep.php</code>中左上角显示本人已标注数据的地方原来使用的是从COOKIE中获得记录(43行开始)，如下：</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"logo"</span> &gt;</span></div><div class="line">	您已完成<span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">'finish'</span> <span class="attr">id</span>=<span class="string">"finish"</span>&gt;</span> </div><div class="line">	<span class="php"><span class="meta">&lt;?php</span> </span></div><div class="line"><span class="php">		<span class="keyword">echo</span> $_COOKIE[<span class="string">'dep_finish'</span>];</span></div><div class="line"><span class="php">	<span class="meta">?&gt;</span></span> <span class="tag">&lt;/<span class="name">label</span>&gt;</span>句标注任务</div><div class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></div></pre></td></tr></tbody></table></figure>
+<p>实测很多时候不好用，因此改为直接从数据库中的<code>signup</code>表中读取当前用户已完成标注数目：</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"logo"</span> &gt;</span></div><div class="line">	您已完成<span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">'finish'</span> <span class="attr">id</span>=<span class="string">"finish"</span>&gt;</span> </div><div class="line">        <span class="php"><span class="meta">&lt;?php</span> </span></div><div class="line"><span class="php">			$sql = <span class="string">"select dep_compelete from signup where username = '"</span>.$_COOKIE[<span class="string">'user'</span>].<span class="string">"'"</span>;</span></div><div class="line"><span class="php">        	mysql_query(<span class="string">"SET NAMES 'UTF8'"</span>);</span></div><div class="line"><span class="php">        	$res = mysql_query($sql);</span></div><div class="line"><span class="php">        	$dep_finish = <span class="string">""</span>;</span></div><div class="line"><span class="php">            <span class="keyword">while</span> ($words = mysql_fetch_assoc($res)){</span></div><div class="line"><span class="php">                $result = $words[<span class="string">'dep_compelete'</span>];</span></div><div class="line"><span class="php">            }</span></div><div class="line"><span class="php">        	<span class="keyword">echo</span> $result;</span></div><div class="line"><span class="php">		<span class="meta">?&gt;</span></span> </div><div class="line">	<span class="tag">&lt;/<span class="name">label</span>&gt;</span>句标注任务 <span class="tag">&lt;/<span class="name">p</span>&gt;</span></div></pre></td></tr></tbody></table></figure>
+<h3 id="标注界面保存后刷新问题"><a href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E6%A0%87%E6%B3%A8%E7%95%8C%E9%9D%A2%E4%BF%9D%E5%AD%98%E5%90%8E%E5%88%B7%E6%96%B0%E9%97%AE%E9%A2%98" class="headerlink" title="标注界面保存后刷新问题"></a>标注界面保存后刷新问题</h3><p><code>label_dep.php</code>中保存标注句子后原来使用的是<code>window.location.href</code>重新打开页面(728行开始)，这样需要用户重新把网页下拉到标注句子的地方：</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> url = <span class="string">"write_dep.php"</span>;</div><div class="line">$.post(</div><div class="line">	url, </div><div class="line">	{res_sent:str, psent : protosent, skip: <span class="string">"0"</span>, 	comment:comment},</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="params">(data)</span></span>{</div><div class="line">		$.cookie(<span class="string">'sent_modify'</span>, <span class="keyword">null</span>);</div><div class="line">		window.location.href=<span class="string">"label_dep.php"</span>;</div><div class="line">	}</div><div class="line">);</div></pre></td></tr></tbody></table></figure>
+<p>这里改为用<code>window.location.reload()</code>刷新，避免用户手动下拉：</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> url = <span class="string">"write_dep.php"</span>;</div><div class="line">$.post(</div><div class="line">	url, </div><div class="line">	{res_sent:str, psent : protosent, skip: <span class="string">"0"</span>, 	comment:comment, sent:newwordpos},</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="params">(data)</span></span>{</div><div class="line">		$.cookie(<span class="string">'sent_modify'</span>, <span class="keyword">null</span>);</div><div class="line">		<span class="keyword">if</span> (data == <span class="string">"写入成功！"</span>)</div><div class="line">        	window.location.reload();</div><div class="line">	}</div><div class="line">);</div></pre></td></tr></tbody></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="http://alexyxwang.me/tags/Sina-App-Engine/" rel="tag"># Sina App Engine</a>
+          
+            <a href="http://alexyxwang.me/tags/PHP/" rel="tag"># PHP</a>
+          
+            <a href="http://alexyxwang.me/tags/Python/" rel="tag"># Python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="http://alexyxwang.me/2017/09/18/%E3%80%8A%E7%8C%A9%E7%90%83%E5%B4%9B%E8%B5%B73%E3%80%8B-%E9%9D%9E%E6%88%91%E6%97%8F%E7%B1%BB%E4%B8%8E%E9%A2%86%E8%A2%96%E7%89%B9%E8%B4%A8/" rel="next" title="《猩球崛起3》-非我族类与领袖特质">
+                <i class="fa fa-chevron-left"></i> 《猩球崛起3》-非我族类与领袖特质
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="http://alexyxwang.me/2017/09/22/%E7%BC%96%E8%AF%91%E5%B9%B6%E4%BD%BF%E7%94%A8ltp%E8%AF%AD%E4%B9%89%E4%BE%9D%E5%AD%98%E5%88%86%E6%9E%90%E6%A8%A1%E5%9D%97/" rel="prev" title="编译并使用ltp语义依存(图)分析模块">
+                编译并使用ltp语义依存(图)分析模块 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDQ0OC83MDAy"><iframe src="./在SAE上部署及使用标注系统 _ Avalon_files/get-uuid.html" title="livere-uuid" id="livere-uuid" style="display: none;"></iframe><iframe title="livere" scrolling="no" frameborder="0" src="./在SAE上部署及使用标注系统 _ Avalon_files/city.html" id="lv-comment-405" style="min-width: 100%; width: 100px; height: 337px; overflow: hidden; border: 0px; z-index: 124212;"></iframe></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first" style="top: 5px; transform: rotateZ(-45deg); width: 100%;"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle" style="opacity: 0;"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last" style="top: -5px; transform: rotateZ(45deg); width: 100%;"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar sidebar-active" style="display: block; width: 320px;">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element" style="opacity: 1; display: block; transform: translateX(0px);">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person" style="opacity: 1; display: block; transform: translateX(0px);">
+          <img class="site-author-image" itemprop="image" src="./在SAE上部署及使用标注系统 _ Avalon_files/avatar.jpg" alt="Alex">
+          <p class="site-author-name" itemprop="name">Alex</p>
+           
+              <p class="site-description motion-element" itemprop="description" style="opacity: 1; display: block; transform: translateX(0px);"></p>
+          
+        </div>
+        <nav class="site-state motion-element" style="opacity: 1; display: block; transform: translateX(0px);">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="http://alexyxwang.me/archives/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="http://alexyxwang.me/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="http://alexyxwang.me/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element" style="opacity: 1; display: block; transform: translateX(0px);">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HITalexwang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:hitalexwang@gmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>
+                  
+                    
+                      E-Mail
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/alex_ritsu" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active" style="opacity: 1; display: block; transform: translateX(0px);">
+          <div class="post-toc" style="max-height: 703px; width: calc(100% + 0px);">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E9%83%A8%E7%BD%B2"><span class="nav-number">1.</span> <span class="nav-text">部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">代码管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.2.</span> <span class="nav-text">创建数据库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E4%BD%BF%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">使用流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E9%A2%84%E5%A4%84%E7%90%86%E5%8F%8A%E5%90%8E%E5%A4%84%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">预处理及后处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E4%B8%BB%E8%A6%81php%E6%96%87%E4%BB%B6%E6%A6%82%E8%BF%B0%E5%8F%8A%E6%A0%87%E6%B3%A8%E6%B5%81%E7%A8%8B"><span class="nav-number">3.1.</span> <span class="nav-text">主要php文件概述及标注流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#index-php"><span class="nav-number">3.1.1.</span> <span class="nav-text">index.php</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#register-php-registerc-php"><span class="nav-number">3.1.2.</span> <span class="nav-text">register.php/registerc.php</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#label-dep-php"><span class="nav-number">3.1.3.</span> <span class="nav-text">label_dep.php</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#historyc-dep-php"><span class="nav-number">3.1.4.</span> <span class="nav-text">historyc_dep.php</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#CoNLL%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E4%B8%BAsql%E6%96%87%E4%BB%B6"><span class="nav-number">3.2.</span> <span class="nav-text">CoNLL文件转换为sql文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#csv%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E4%B8%BACoNLL%E6%96%87%E4%BB%B6"><span class="nav-number">3.3.</span> <span class="nav-text">csv文件转换为CoNLL文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F%E4%BB%8B%E7%BB%8D"><span class="nav-number">4.</span> <span class="nav-text">标注系统介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2"><span class="nav-number">4.1.</span> <span class="nav-text">登录界面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E6%A0%87%E6%B3%A8%E7%95%8C%E9%9D%A2"><span class="nav-number">4.2.</span> <span class="nav-text">标注界面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95"><span class="nav-number">4.3.</span> <span class="nav-text">历史记录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E4%BB%A3%E7%A0%81%E4%BF%AE%E6%94%B9"><span class="nav-number">5.</span> <span class="nav-text">代码修改</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E6%94%B9%E4%B8%BA%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84"><span class="nav-number">5.1.</span> <span class="nav-text">绝对路径改为相对路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E5%B7%B2%E6%A0%87%E6%B3%A8%E6%95%B0%E6%8D%AE%E7%BB%9F%E8%AE%A1"><span class="nav-number">5.2.</span> <span class="nav-text">当前用户已标注数据统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="http://alexyxwang.me/2017/09/19/%E5%9C%A8SAE%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%A0%87%E6%B3%A8%E7%B3%BB%E7%BB%9F/?nsukey=o1S9c1gb57eiTAf4cdjw3NKSktE9wpS745NQ7Y%2BbEl%2BUxB00uQx3sBfnEpk%2Blf2QYGpx5rKiduIn1ygFr8o1JBurziQi85k%2FoxvAQCBVCV4hKr9w0oj4m5UzfciXWqMFcZ16NguR%2BvDFkCNLqEC99%2FfKLDFaFttL8Y65ui6MjYQ%3D#%E6%A0%87%E6%B3%A8%E7%95%8C%E9%9D%A2%E4%BF%9D%E5%AD%98%E5%90%8E%E5%88%B7%E6%96%B0%E9%97%AE%E9%A2%98"><span class="nav-number">5.3.</span> <span class="nav-text">标注界面保存后刷新问题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  ©  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io/">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="./在SAE上部署及使用标注系统 _ Avalon_files/index.js"></script>
+
+  
+  <script type="text/javascript" src="./在SAE上部署及使用标注系统 _ Avalon_files/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="./在SAE上部署及使用标注系统 _ Avalon_files/jquery.lazyload.js"></script>
+
+  
+  <script type="text/javascript" src="./在SAE上部署及使用标注系统 _ Avalon_files/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="./在SAE上部署及使用标注系统 _ Avalon_files/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="./在SAE上部署及使用标注系统 _ Avalon_files/jquery.fancybox.pack.js"></script>
+
+  
+  <script type="text/javascript" src="./在SAE上部署及使用标注系统 _ Avalon_files/canvas-nest.min.js"></script><canvas id="c_n11" width="1440" height="803" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 0.5;"></canvas>
+
+
+  
+
+
+  <script type="text/javascript" src="./在SAE上部署及使用标注系统 _ Avalon_files/utils.js"></script>
+
+  <script type="text/javascript" src="./在SAE上部署及使用标注系统 _ Avalon_files/motion.js"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="./在SAE上部署及使用标注系统 _ Avalon_files/scrollspy.js"></script>
+<script type="text/javascript" src="./在SAE上部署及使用标注系统 _ Avalon_files/post-details.js"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="./在SAE上部署及使用标注系统 _ Avalon_files/bootstrap.js"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="./在SAE上部署及使用标注系统 _ Avalon_files/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("S6cvzi2hwiImogUXPQ8vzN0M-gzGzoHsz", "hYKhvBujDvkv64nm4Mxloybi");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config;executed=true">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config;executed=true">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script src="./在SAE上部署及使用标注系统 _ Avalon_files/MathJax.js" id="">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+<iframe id="blockbyte-bs-sidebar" data-pos="right" src="./在SAE上部署及使用标注系统 _ Avalon_files/saved_resource.html"></iframe><div id="blockbyte-bs-indicator" class="blockbyte-bs-fullHeight" style="width: 2px; height: 100%; top: 0%;"></div><div id="t{S=-)y~1533610765793"></div><iframe title="livere" scrolling="no" frameborder="0" src="./在SAE上部署及使用标注系统 _ Avalon_files/city(1).html" id="lv-utils-531" style="width: 100%; overflow: hidden; border: 0px; position: fixed; left: 0px; top: 0px; z-index: 2147483647; display: none; height: 803px;"></iframe><div id="SL_balloon_obj" alt="0" style="display: block;"><div id="SL_button" class="SL_ImTranslatorLogo" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/imtranslator-s.png&quot;); display: none;"></div><div id="SL_shadow_translation_result2" style="display: none;"></div><div id="SL_shadow_translator" style="display: none;"><div id="SL_planshet"><div id="SL_arrow_up" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/up.png&quot;);"></div><div id="SL_Bproviders"><div class="SL_BL_LABLE_ON" title="Google" id="SL_P0">G</div><div class="SL_BL_LABLE_ON" title="Microsoft" id="SL_P1">M</div><div class="SL_BL_LABLE_ON" title="Translator" id="SL_P2">T</div></div><div id="SL_alert_bbl" style="display: none;"><div id="SLHKclose" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/delete.png&quot;);"></div><div id="SL_alert_cont"></div></div><div id="SL_TB"><table id="SL_tables" cellspacing="1"><tr><td class="SL_td" width="10%" align="right"><input id="SL_locer" type="checkbox" title="锁定语言"></td><td class="SL_td" width="20%" align="left"><select id="SL_lng_from" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/select.png&quot;) 100% 0px no-repeat rgb(255, 255, 255);"><option value="auto">检测语言</option><option value="eo">世界语</option><option value="zh-CN">中文简体</option><option value="zh-TW">中文繁体</option><option value="da">丹麦语</option><option value="uk">乌克兰语</option><option value="uz">乌兹别克语</option><option value="ur">乌尔都语</option><option value="hy">亚美尼亚语</option><option value="ig">伊博语</option><option value="ru">俄语</option><option value="bg">保加利亚语</option><option value="sd">信德语</option><option value="sn">修纳语</option><option value="si">僧伽罗语</option><option value="hr">克罗地亚语</option><option value="is">冰岛语</option><option value="gl">加利西亚语</option><option value="ca">加泰罗尼亚语</option><option value="hu">匈牙利语</option><option value="zu">南非祖鲁语</option><option value="kn">卡纳达语</option><option value="lb">卢森堡语</option><option value="hi">印地语</option><option value="su">印尼巽他语</option><option value="jw">印尼爪哇语</option><option value="id">印尼语</option><option value="gu">古吉拉特语</option><option value="ky">吉尔吉斯语</option><option value="kk">哈萨克语</option><option value="tr">土耳其语</option><option value="tg">塔吉克语</option><option value="sr">塞尔维亚语</option><option value="st">塞索托语</option><option value="haw">夏威夷语</option><option value="cy">威尔士语</option><option value="bn">孟加拉语</option><option value="ceb">宿务语</option><option value="ne">尼泊尔语</option><option value="eu">巴斯克语</option><option value="af">布尔语(南非荷兰语)</option><option value="iw">希伯来语</option><option value="el">希腊语</option><option value="ku">库尔德语</option><option value="fy">弗里西语</option><option value="de">德语</option><option value="it">意大利语</option><option value="yi">意第绪语</option><option value="la">拉丁语</option><option value="lv">拉脱维亚语</option><option value="no">挪威语</option><option value="cs">捷克语</option><option value="sk">斯洛伐克语</option><option value="sl">斯洛文尼亚语</option><option value="sw">斯瓦希里语</option><option value="pa">旁遮普语</option><option value="ja">日语</option><option value="ps">普什图语</option><option value="ka">格鲁吉亚语</option><option value="mi">毛利语</option><option value="fr">法语</option><option value="pl">波兰语</option><option value="bs">波斯尼亚语</option><option value="fa">波斯语</option><option value="te">泰卢固语</option><option value="ta">泰米尔语</option><option value="th">泰语</option><option value="ht">海地克里奥尔语</option><option value="ga">爱尔兰语</option><option value="et">爱沙尼亚语</option><option value="sv">瑞典语</option><option value="be">白俄罗斯语</option><option value="xh">科萨</option><option value="co">科西嘉语</option><option value="lt">立陶宛语</option><option value="so">索马里语</option><option value="yo">约鲁巴语</option><option value="my">缅甸语</option><option value="ro">罗马尼亚语</option><option value="lo">老挝语</option><option value="fi">芬兰语</option><option value="gd">苏格兰盖尔语</option><option value="hmn">苗语</option><option value="en">英语</option><option value="nl">荷兰语</option><option value="tl">菲律宾语</option><option value="sm">萨摩亚语</option><option value="pt">葡萄牙语</option><option value="mn">蒙古语</option><option value="es">西班牙语</option><option value="ha">豪萨语</option><option value="vi">越南语</option><option value="az">阿塞拜疆语</option><option value="am">阿姆哈拉语</option><option value="sq">阿尔巴尼亚语</option><option value="ar">阿拉伯语</option><option value="ko">韩语</option><option value="mk">马其顿语</option><option value="mg">马尔加什语</option><option value="mr">马拉地语</option><option value="ml">马拉雅拉姆语</option><option value="ms">马来语</option><option value="mt">马耳他语</option><option value="km">高棉语</option><option value="ny">齐切瓦语</option></select></td><td class="SL_td" width="3" align="center"><div id="SL_switch_b" title="切换语言" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/switchb.png&quot;);"></div></td><td class="SL_td" width="20%" align="left"><select id="SL_lng_to" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/select.png&quot;) 100% 0px no-repeat rgb(255, 255, 255);"><option value="eo">世界语</option><option selected="selected" value="zh-CN">中文简体</option><option value="zh-TW">中文繁体</option><option value="da">丹麦语</option><option value="uk">乌克兰语</option><option value="uz">乌兹别克语</option><option value="ur">乌尔都语</option><option value="hy">亚美尼亚语</option><option value="ig">伊博语</option><option value="ru">俄语</option><option value="bg">保加利亚语</option><option value="sd">信德语</option><option value="sn">修纳语</option><option value="si">僧伽罗语</option><option value="hr">克罗地亚语</option><option value="is">冰岛语</option><option value="gl">加利西亚语</option><option value="ca">加泰罗尼亚语</option><option value="hu">匈牙利语</option><option value="zu">南非祖鲁语</option><option value="kn">卡纳达语</option><option value="lb">卢森堡语</option><option value="hi">印地语</option><option value="su">印尼巽他语</option><option value="jw">印尼爪哇语</option><option value="id">印尼语</option><option value="gu">古吉拉特语</option><option value="ky">吉尔吉斯语</option><option value="kk">哈萨克语</option><option value="tr">土耳其语</option><option value="tg">塔吉克语</option><option value="sr">塞尔维亚语</option><option value="st">塞索托语</option><option value="haw">夏威夷语</option><option value="cy">威尔士语</option><option value="bn">孟加拉语</option><option value="ceb">宿务语</option><option value="ne">尼泊尔语</option><option value="eu">巴斯克语</option><option value="af">布尔语(南非荷兰语)</option><option value="iw">希伯来语</option><option value="el">希腊语</option><option value="ku">库尔德语</option><option value="fy">弗里西语</option><option value="de">德语</option><option value="it">意大利语</option><option value="yi">意第绪语</option><option value="la">拉丁语</option><option value="lv">拉脱维亚语</option><option value="no">挪威语</option><option value="cs">捷克语</option><option value="sk">斯洛伐克语</option><option value="sl">斯洛文尼亚语</option><option value="sw">斯瓦希里语</option><option value="pa">旁遮普语</option><option value="ja">日语</option><option value="ps">普什图语</option><option value="ka">格鲁吉亚语</option><option value="mi">毛利语</option><option value="fr">法语</option><option value="pl">波兰语</option><option value="bs">波斯尼亚语</option><option value="fa">波斯语</option><option value="te">泰卢固语</option><option value="ta">泰米尔语</option><option value="th">泰语</option><option value="ht">海地克里奥尔语</option><option value="ga">爱尔兰语</option><option value="et">爱沙尼亚语</option><option value="sv">瑞典语</option><option value="be">白俄罗斯语</option><option value="xh">科萨</option><option value="co">科西嘉语</option><option value="lt">立陶宛语</option><option value="so">索马里语</option><option value="yo">约鲁巴语</option><option value="my">缅甸语</option><option value="ro">罗马尼亚语</option><option value="lo">老挝语</option><option value="fi">芬兰语</option><option value="gd">苏格兰盖尔语</option><option value="hmn">苗语</option><option value="en">英语</option><option value="nl">荷兰语</option><option value="tl">菲律宾语</option><option value="sm">萨摩亚语</option><option value="pt">葡萄牙语</option><option value="mn">蒙古语</option><option value="es">西班牙语</option><option value="ha">豪萨语</option><option value="vi">越南语</option><option value="az">阿塞拜疆语</option><option value="am">阿姆哈拉语</option><option value="sq">阿尔巴尼亚语</option><option value="ar">阿拉伯语</option><option value="ko">韩语</option><option value="mk">马其顿语</option><option value="mg">马尔加什语</option><option value="mr">马拉地语</option><option value="ml">马拉雅拉姆语</option><option value="ms">马来语</option><option value="mt">马耳他语</option><option value="km">高棉语</option><option value="ny">齐切瓦语</option></select></td><td class="SL_td" width="5%" align="center"> </td><td class="SL_td" width="8%" align="center"><div id="SL_TTS_voice" title="undefined" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/ttsvoice.png&quot;);"></div></td><td class="SL_td" width="8%" align="center"><div id="SL_copy" title="复制译文" class="SL_copy" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/copy.png&quot;);"></div></td><td class="SL_td" width="8%" align="center"><div id="SL_bbl_font_patch"></div><div id="SL_bbl_font" title="字体大小" class="SL_bbl_font" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/font.png&quot;);"></div></td><td class="SL_td" width="8%" align="center"><div id="SL_bbl_help" title="帮助" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/bhelp.png&quot;);"></div></td><td class="SL_td" width="15%" align="right"><div id="SL_pin" class="SL_pin_off" title="固定弹出窗口" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/pin-on.png&quot;);"></div></td></tr></table></div></div><div id="SL_shadow_translation_result" style="visibility: visible;"></div><div id="SL_loading" class="SL_loading" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/loading.gif&quot;);"></div><div id="SL_player2"></div><div id="SL_alert100">文本转语音功能仅限200个字符</div><div id="SL_Balloon_options" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/bg3.png&quot;) rgb(255, 255, 255);"><div id="SL_arrow_down" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/down.png&quot;);"></div><table id="SL_tbl_opt" width="100%"><tr><td width="5%" align="center"><input id="SL_BBL_locer" type="checkbox" checked="0" title="显示翻译器的按钮 3 秒"></td><td width="5%" align="left"><div id="SL_BBL_IMG" title="显示翻译器的按钮 3 秒" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/bbl-logo.png&quot;);"></div></td><td width="70%" align="center"><a href="chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/html/options/options.html?bbl" target="_blank" class="SL_options" title="显示选项">选项</a> : <a href="chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/html/options/options.html?hist" target="_blank" class="SL_options" title="翻译历史记录">历史</a> : <a href="chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/html/options/options.html?feed" target="_blank" class="SL_options" title="反馈">反馈</a> : <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=GD9D8CPW8HFA2" target="_blank" class="SL_options" title="作出一点点贡献">Donate</a></td><td width="15%" align="right"><span id="SL_Balloon_Close" title="关闭">关闭</span></td></tr></table></div></div></div></body></html>
